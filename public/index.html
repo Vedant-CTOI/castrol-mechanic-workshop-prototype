@@ -1457,6 +1457,136 @@
     .dummy-copy-card h4:first-child {
       margin-top: 0;
     }
+
+    /* ===== CAPTURE FLOW UX (PHOTO + VOICE) ===== */
+    .flow-progress { display:flex; flex-direction:column; gap:6px; }
+    .flow-progress-top { display:flex; justify-content:space-between; font-size:11px; font-weight:700; color:var(--text-sub); letter-spacing:0.02em; }
+    .flow-progress-top b { color:var(--castrol-green); font-weight:700; }
+    .flow-track { height:4px; border-radius:4px; background:#E5E7EB; overflow:hidden; }
+    .flow-fill { height:100%; background:var(--castrol-green); border-radius:4px; transition:width .3s ease; }
+
+    .tips-card { flex-shrink:0; background:var(--castrol-green-soft); border:1px solid var(--castrol-green-border); border-radius:14px; padding:12px 14px; display:flex; flex-direction:column; gap:10px; }
+    .tips-head { display:flex; justify-content:space-between; align-items:center; font-size:11px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:var(--castrol-green-dark); }
+    .tips-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .tips-col { display:flex; flex-direction:column; gap:5px; }
+    .tips-col-title { font-size:11.5px; font-weight:700; padding-bottom:4px; border-bottom:1px solid var(--castrol-green-border); margin-bottom:2px; }
+    .tips-col.do .tips-col-title { color:var(--castrol-green-dark); }
+    .tips-col.avoid .tips-col-title { color:var(--castrol-red); border-bottom-color:var(--castrol-red-border); }
+    .tip-line { font-size:11.5px; line-height:1.35; color:#1F2937; }
+    .tips-numbered { display:flex; flex-direction:column; gap:4px; }
+    .tips-numbered .tip-line { display:flex; gap:8px; }
+    .tips-numbered .tip-line b { color:var(--castrol-green-dark); font-weight:700; min-width:12px; }
+    .tips-reopen { align-self:flex-start; background:none; border:none; padding:2px 0; font-family:inherit; font-size:12px; font-weight:700; color:var(--castrol-green); text-decoration:underline; cursor:pointer; }
+
+    .capture-frame { position:relative; width:100%; flex:0 1 236px; min-height:150px; border-radius:16px; border:1.5px dashed var(--castrol-green-border); background:#F8FBF9; overflow:hidden; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+    .capture-frame .face-outline { max-height:78%; }
+    .capture-frame.has-photo { border-style:solid; border-color:var(--castrol-green); cursor:default; flex:1 1 auto; max-height:420px; }
+    .capture-frame.is-failed { border-style:solid; border-color:var(--castrol-red); }
+    .capture-frame .face-outline { width:170px; height:170px; max-height:78%; margin-top:-18px; }
+    .capture-hint { position:absolute; bottom:14px; left:0; right:0; text-align:center; font-size:12px; font-weight:600; color:var(--castrol-green-dark); }
+    .capture-photo { position:absolute; inset:0; }
+    .capture-photo svg { width:100%; height:100%; }
+    .capture-scan { position:absolute; inset:0; background:rgba(255,255,255,0.55); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; font-size:12.5px; font-weight:700; color:var(--castrol-green-dark); }
+    .capture-scan::before { content:""; position:absolute; left:0; right:0; height:3px; background:var(--castrol-green); box-shadow:0 0 14px var(--castrol-green); animation:scanLine 1.4s ease-in-out infinite; }
+    @keyframes scanLine { 0% { top:8%; } 50% { top:88%; } 100% { top:8%; } }
+    .status-chip { position:absolute; top:10px; left:10px; padding:5px 10px; border-radius:99px; font-size:11px; font-weight:700; }
+    .status-chip.ok { background:var(--castrol-green); color:#fff; }
+    .status-chip.bad { background:var(--castrol-red); color:#fff; }
+    .frame-actions { position:absolute; bottom:10px; left:10px; right:10px; display:flex; gap:8px; }
+    .frame-actions button { flex:1; height:34px; border-radius:9px; border:none; background:rgba(255,255,255,0.94); font-family:inherit; font-size:12px; font-weight:700; color:var(--text-main); cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:5px; box-shadow:0 2px 6px rgba(0,0,0,0.12); }
+    .frame-actions button.icon-only { flex:0 0 34px; color:var(--castrol-red); }
+
+    .cta-stack { display:flex; flex-direction:column; gap:10px; flex-shrink:0; }
+    .script-card, .recorder-zone, .skip-zone, .inline-alert, .flow-progress, .default-voice-card { flex-shrink:0; }
+    .btn-secondary-outline { width:100%; height:46px; border-radius:12px; border:1.5px solid var(--castrol-green); background:#fff; color:var(--castrol-green); font-family:inherit; font-size:14px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px; }
+    .inline-alert { border-radius:12px; padding:10px 12px; font-size:12px; line-height:1.4; display:flex; gap:8px; align-items:flex-start; }
+    .inline-alert.bad { background:var(--castrol-red-soft); border:1px solid var(--castrol-red-border); color:#991B1B; }
+    .inline-alert.ok { background:var(--castrol-green-soft); border:1px solid var(--castrol-green-border); color:var(--castrol-green-dark); }
+    .inline-alert b { font-weight:700; }
+    .inline-alert .alert-actions { display:flex; gap:12px; margin-top:6px; }
+    .link-btn { background:none; border:none; padding:0; font-family:inherit; font-size:12px; font-weight:700; color:var(--castrol-green); text-decoration:underline; cursor:pointer; }
+
+    /* photo check popup */
+    .photo-check-card { text-align:center; }
+    .check-badge { width:56px; height:56px; border-radius:50%; margin:0 auto 12px; display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:800; }
+    .check-badge.ok { background:var(--castrol-green); color:#fff; }
+    .check-badge.bad { background:var(--castrol-red-soft); color:var(--castrol-red); border:1px solid var(--castrol-red-border); }
+    .check-spinner { width:46px; height:46px; margin:4px auto 14px; border-radius:50%; border:4px solid #E5E7EB; border-top-color:var(--castrol-green); animation:spinA 0.9s linear infinite; }
+    @keyframes spinA { to { transform:rotate(360deg); } }
+    .photo-check-card h3 { font-size:17px; font-weight:700; margin-bottom:6px; }
+    .photo-check-card p.sub { font-size:12.5px; color:#4B5563; line-height:1.45; margin-bottom:14px; }
+    .check-steps { display:flex; flex-direction:column; gap:7px; text-align:left; margin-bottom:16px; background:#F9FAFB; border:1px solid var(--border-neutral); border-radius:12px; padding:10px 12px; }
+    .check-step { display:flex; align-items:center; gap:8px; font-size:12.5px; color:#1F2937; }
+    .check-step i { font-style:normal; width:18px; height:18px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:10px; font-weight:800; flex-shrink:0; }
+    .check-step.ok i { background:var(--castrol-green); color:#fff; }
+    .check-step.bad i { background:var(--castrol-red); color:#fff; }
+    .check-step.bad { color:#991B1B; font-weight:600; }
+    .check-step.pending { opacity:0; animation:fadeStep .35s ease forwards; }
+    .check-step.pending i { background:var(--castrol-green); color:#fff; }
+    @keyframes fadeStep { to { opacity:1; } }
+    .modal-btn-stack { display:flex; flex-direction:column; gap:8px; }
+
+    /* voice page */
+    .script-card { border:1px solid var(--border-neutral); border-radius:14px; padding:12px 14px; background:#fff; display:flex; flex-direction:column; gap:8px; }
+    .script-card-head { display:flex; justify-content:space-between; align-items:center; font-size:11px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:var(--castrol-green-dark); }
+    .script-card-head span:last-child { color:var(--text-sub); letter-spacing:0; text-transform:none; font-weight:600; }
+    .script-scroll { position:relative; max-height:90px; overflow-y:auto; font-size:14px; line-height:1.55; color:#9CA3AF; padding-right:4px; }
+    .script-scroll.idle { color:#1F2937; }
+    .script-scroll.live { max-height:190px; font-size:15px; }
+    .script-phrase { transition:color .2s ease, background .2s ease; border-radius:4px; }
+    .script-phrase.done { color:#1F2937; }
+    .script-phrase.current { color:#004D21; background:#BCE6C4; font-weight:700; box-shadow:0 0 0 2px #BCE6C4; }
+
+    .recorder-zone { display:flex; flex-direction:column; align-items:center; gap:8px; padding:0; }
+    .mic-big { position:relative; width:72px; height:72px; border-radius:50%; border:none; background:var(--castrol-red); color:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 8px 20px rgba(240,0,35,0.28); font-family:inherit; }
+    .mic-big svg { width:28px; height:28px; }
+    .mic-big.counting { background:#fff; color:var(--castrol-red); border:3px solid var(--castrol-red); font-size:34px; font-weight:800; box-shadow:none; }
+    .mic-big.recording::before { content:""; position:absolute; inset:-10px; border-radius:50%; border:3px solid rgba(240,0,35,0.35); animation:pulseRing 1.3s ease-out infinite; }
+    @keyframes pulseRing { from { transform:scale(0.9); opacity:1; } to { transform:scale(1.25); opacity:0; } }
+    .mic-big .stop-square { width:26px; height:26px; border-radius:6px; background:#fff; }
+    .mic-label { font-size:12.5px; font-weight:700; color:var(--text-main); }
+    .rec-meta { width:100%; display:flex; flex-direction:column; gap:6px; }
+    .rec-time-row { display:flex; justify-content:space-between; font-size:12px; font-weight:700; color:var(--castrol-red); font-variant-numeric:tabular-nums; }
+    .rec-time-row span:last-child { color:var(--text-sub); font-weight:600; }
+    .rec-track { position:relative; height:6px; border-radius:6px; background:#F3F4F6; overflow:visible; }
+    .rec-track-fill { height:100%; width:0; border-radius:6px; background:var(--castrol-red); }
+    .rec-marker { position:absolute; left:83.33%; top:-4px; width:2px; height:14px; background:var(--castrol-green); }
+    .rec-marker-label { position:absolute; left:83.33%; top:12px; transform:translateX(-50%); font-size:9.5px; font-weight:700; color:var(--castrol-green-dark); }
+    .level-meter { display:flex; align-items:center; justify-content:center; gap:3px; height:30px; margin-top:10px; }
+    .level-meter span { width:4px; height:4px; border-radius:2px; background:var(--castrol-green); transition:height .1s ease; }
+    .level-meter span.hot { background:var(--castrol-red); }
+    .level-warn { font-size:11.5px; font-weight:700; text-align:center; min-height:16px; }
+    .level-warn.ok { color:var(--castrol-green-dark); }
+    .level-warn.warn { color:var(--castrol-red); }
+
+    .player-row { width:100%; display:flex; align-items:center; gap:10px; border:1px solid var(--border-neutral); border-radius:12px; padding:10px 12px; background:#fff; }
+    .play-btn-round { width:38px; height:38px; border-radius:50%; border:none; background:var(--castrol-green); color:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; }
+    .play-btn-round svg { width:15px; height:15px; }
+    .play-btn-round .pause-bars { display:flex; gap:3px; } .play-btn-round .pause-bars span { width:4px; height:13px; background:#fff; border-radius:1px; }
+    .player-mid { flex:1; display:flex; flex-direction:column; gap:5px; min-width:0; }
+    .player-name { font-size:12.5px; font-weight:700; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .player-track { height:4px; border-radius:4px; background:#E5E7EB; overflow:hidden; }
+    .player-fill { height:100%; width:0; background:var(--castrol-green); }
+    .player-time { font-size:10.5px; color:var(--text-sub); font-variant-numeric:tabular-nums; }
+    .quality-chip { align-self:flex-start; padding:5px 10px; border-radius:99px; font-size:11.5px; font-weight:700; }
+    .quality-chip.ok { background:var(--castrol-green-soft); color:var(--castrol-green-dark); border:1px solid var(--castrol-green-border); }
+    .quality-chip.warn { background:#FFF7ED; color:#9A3412; border:1px solid #FED7AA; }
+    .review-actions { width:100%; display:flex; gap:8px; }
+    .review-actions button { flex:1; }
+
+    .alt-actions { display:flex; flex-direction:column; align-items:center; gap:1px; }
+    .alt-upload-btn { background:none; border:none; font-family:inherit; font-size:13px; font-weight:700; color:var(--castrol-green); cursor:pointer; display:inline-flex; align-items:center; gap:6px; padding:2px 0; }
+    .alt-hint { font-size:11px; color:var(--text-sub); }
+
+    .skip-zone { border-top:1px solid var(--border-neutral); padding-top:10px; display:flex; flex-direction:column; gap:4px; }
+    .skip-zone .nudge { font-size:11.5px; color:var(--text-sub); line-height:1.4; }
+    .skip-row { display:flex; justify-content:space-between; align-items:center; }
+    .sample-btn { background:none; border:1px solid var(--border-neutral); border-radius:99px; padding:5px 11px; font-family:inherit; font-size:11.5px; font-weight:700; color:var(--text-main); cursor:pointer; display:inline-flex; align-items:center; gap:5px; }
+    .sample-btn svg { width:10px; height:10px; }
+    .default-voice-card { border:1px solid var(--castrol-green-border); background:var(--castrol-green-soft); border-radius:14px; padding:14px; display:flex; flex-direction:column; gap:8px; }
+    .default-voice-card h4 { font-size:14px; font-weight:700; color:var(--castrol-green-dark); }
+    .default-voice-card p { font-size:12px; color:#374151; line-height:1.45; }
+    .default-voice-card .row { display:flex; gap:12px; align-items:center; margin-top:2px; }
   </style>
 </head>
 <body>
@@ -1543,14 +1673,27 @@
       },
 
       photo: {
-        status: 'empty', // 'empty' | 'uploaded'
+        status: 'empty', // 'empty' | 'checking' | 'passed' | 'failed'
+        source: 'camera', // 'camera' | 'gallery'
+        galleryFailedOnce: false,
+        failReason: '',
         guidelinesOpen: true
       },
+      photoCheck: null, // null | 'checking' | 'pass' | 'fail'
+      showMicPermission: false,
 
       audio: {
-        status: 'idle', // 'idle' | 'script_ready' | 'recording' | 'recorded' | 'uploaded' | 'skipped'
+        status: 'idle', // 'idle' | 'countdown' | 'recording' | 'review' | 'too_short' | 'uploaded' | 'upload_error' | 'mic_denied' | 'skipped'
         seconds: 0,
+        countdown: 3,
+        duration: 0,
         fileName: '',
+        blobUrl: null,
+        quality: 'ok',
+        uploadError: '',
+        micAsked: false,
+        playing: false,
+        samplePlaying: false,
         guidelinesOpen: true
       },
 
@@ -1798,98 +1941,129 @@
       `;
     }
 
-    // 3A. DEDICATED PHOTO UPLOAD PAGE
+    const SCRIPT_PHRASES = [
+      'Namaste! I am the owner of this workshop,',
+      'and every engine that comes to us',
+      'is treated like our own.',
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit,',
+      'sed do eiusmod tempor incididunt ut labore',
+      'et dolore magna aliqua.',
+      'Ut enim ad minim veniam, quis nostrud exercitation',
+      'ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      'Duis aute irure dolor in reprehenderit in voluptate velit esse.',
+      'Trust Castrol Magnatec — protection from the moment you start.'
+    ];
+
+    function fmtTime(s) {
+      s = Math.max(0, Math.floor(s || 0));
+      return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+    }
+
+    function currentPhraseIndex(sec) {
+      const per = 27 / SCRIPT_PHRASES.length;
+      return Math.min(SCRIPT_PHRASES.length - 1, Math.floor(sec / per));
+    }
+
+    function renderFlowProgress(stepNum, label) {
+      return `
+        <div class="flow-progress">
+          <div class="flow-progress-top"><span><b>Step ${stepNum}</b> of 2</span><span>${label}</span></div>
+          <div class="flow-track"><div class="flow-fill" style="width:${stepNum * 50}%;"></div></div>
+        </div>
+      `;
+    }
+
+    const FACE_OUTLINE_SVG = `<svg class="face-outline" viewBox="0 0 200 200" fill="none">
+      <ellipse cx="100" cy="84" rx="44" ry="56" stroke="#009343" stroke-width="2.5" stroke-dasharray="7 6"/>
+      <path d="M36 198 C44 152 70 142 100 142 C130 142 156 152 164 198" stroke="#009343" stroke-width="2.5" stroke-dasharray="7 6" stroke-linecap="round"/>
+    </svg>`;
+
+    // 3A. PHOTO PAGE — tips first, big capture frame, live moderation check
     function renderStep3() {
-      const pReady = state.photo.status === 'uploaded';
+      const p = state.photo;
+      const passed = p.status === 'passed';
+      const checking = p.status === 'checking';
+      const failed = p.status === 'failed';
+
+      const tips = p.guidelinesOpen ? `
+        <div class="tips-card">
+          <div class="tips-head">
+            <span>Photo tips</span>
+            <button class="guideline-close-x" onclick="togglePhotoGuidelines(false)" title="Hide tips">✕</button>
+          </div>
+          <div class="tips-grid">
+            <div class="tips-col do">
+              <div class="tips-col-title">Do</div>
+              <div class="tip-line">Face the camera directly</div>
+              <div class="tip-line">Use bright, even light</div>
+              <div class="tip-line">Keep only yourself in frame</div>
+            </div>
+            <div class="tips-col avoid">
+              <div class="tips-col-title">Avoid</div>
+              <div class="tip-line">Caps or helmets</div>
+              <div class="tip-line">Sunglasses or masks</div>
+              <div class="tip-line">Blurry or group photos</div>
+            </div>
+          </div>
+        </div>
+      ` : `<button class="tips-reopen" onclick="togglePhotoGuidelines(true)">View photo tips</button>`;
+
+      const frame = `
+        <div class="capture-frame ${passed ? 'has-photo' : ''} ${failed ? 'is-failed' : ''}" ${(!passed && !checking) ? `onclick="openPhotoModal('camera')"` : ''}>
+          ${(passed || checking || failed) ? `
+            <div class="capture-photo" style="${failed ? 'filter:brightness(0.55) blur(1.5px);' : ''}">${getMechanicPortraitSVG(state.cropZoom)}</div>
+          ` : `
+            ${FACE_OUTLINE_SVG}
+            <div class="capture-hint">Position your face inside the outline</div>
+          `}
+          ${checking ? `<div class="capture-scan">Checking your photo…</div>` : ''}
+          ${passed ? `
+            <span class="status-chip ok">✓ Looks great</span>
+            <div class="frame-actions">
+              <button onclick="event.stopPropagation(); openPhotoModal('camera')">${ICONS.camera}<span>Retake</span></button>
+              <button onclick="event.stopPropagation(); openPhotoModal('crop')">${ICONS.crop}<span>Crop</span></button>
+              <button class="icon-only" title="Delete photo" onclick="event.stopPropagation(); deletePhoto()">${ICONS.trash}</button>
+            </div>
+          ` : ''}
+          ${failed ? `<span class="status-chip bad">✕ Can't be used</span>` : ''}
+        </div>
+      `;
+
+      const failAlert = failed ? `
+        <div class="inline-alert bad">
+          <div><b>Photo not accepted.</b> ${p.failReason} Try again near a window or bright light.</div>
+        </div>
+      ` : '';
+
+      const ctas = !passed ? `
+        <div class="cta-stack">
+          <button class="primary-cta" style="height:48px;" ${checking ? 'disabled' : ''} onclick="openPhotoModal('camera')">
+            ${ICONS.camera}<span>${failed ? 'Retake selfie' : 'Take a selfie'}</span>
+          </button>
+          <button class="btn-secondary-outline" ${checking ? 'disabled style="opacity:.5"' : ''} onclick="openPhotoModal('gallery')">
+            ${ICONS.gallery}<span>Upload from gallery</span>
+          </button>
+        </div>
+      ` : '';
 
       return `
         ${renderTopHeader(2)}
         <div class="white-sheet">
-          <div class="sheet-body" style="justify-content:flex-start; gap:16px;">
+          <div class="sheet-body" style="justify-content:flex-start; gap:14px;">
+            ${renderFlowProgress(1, 'Your photo')}
             <div class="screen-header-block">
-              <h2 class="screen-title">Upload your photo</h2>
-              <p class="screen-subtitle">Capture a clear front-facing photo or upload one from your phone.</p>
+              <h2 class="screen-title">Add your photo</h2>
+              <p class="screen-subtitle">This photo will appear in your personalised video.</p>
             </div>
-
-            <!-- PHOTO CAPTURE OR UPLOAD + CROP + COLLAPSIBLE PHOTO GUIDELINES -->
-            <div class="section-card" style="padding:18px; gap:14px;">
-              <div class="section-header-row" style="margin-bottom:0;">
-                <div class="section-step-title">
-                  <span class="step-num-badge">1</span>
-                  Your Photo *
-                </div>
-                ${pReady ? `
-                  <div style="display:flex; align-items:center; gap:8px;">
-                    <button onclick="openPhotoModal('crop')" style="background:none;border:none;color:var(--castrol-green);font-size:11.5px;font-weight:700;cursor:pointer;">
-                      ✎ Crop Photo
-                    </button>
-                    <button class="delete-icon-btn" onclick="deletePhoto()" title="Delete Photo">
-                      ${ICONS.trash}
-                    </button>
-                  </div>
-                ` : ''}
-              </div>
-
-              <div class="photo-compact-grid" style="grid-template-columns: 120px 1fr; gap:14px;">
-                <div class="photo-thumb-box ${pReady ? 'has-photo' : ''}" style="width:120px; height:120px;" onclick="${pReady ? `openPhotoModal('crop')` : `openPhotoModal('camera')`}">
-                  ${pReady ? `
-                    ${getMechanicPortraitSVG(state.cropZoom)}
-                  ` : `
-                    <div style="color:var(--castrol-green); margin-bottom:4px;">${ICONS.camera}</div>
-                    <span style="font-size:11px; font-weight:700; color:var(--castrol-green-dark);">Preview</span>
-                  `}
-                </div>
-
-                <div class="photo-actions-col">
-                  <button class="compact-action-btn" onclick="openPhotoModal('camera')">
-                    <span class="mini-icon">${ICONS.camera}</span>
-                    <span>Capture Photo</span>
-                  </button>
-                  <button class="compact-action-btn" onclick="openPhotoModal('crop')">
-                    <span class="mini-icon">${ICONS.gallery}</span>
-                    <span>Upload Photo</span>
-                  </button>
-                </div>
-              </div>
-
-              <!-- 4 PHOTO-SPECIFIC GUIDELINES LISTED DOWN & COLLAPSIBLE WITH CROSS BUTTON -->
-              ${state.photo.guidelinesOpen ? `
-                <div class="guideline-collapse-box">
-                  <div class="guideline-collapse-top">
-                    <span class="guideline-collapse-title">Photo Guidelines</span>
-                    <button class="guideline-close-x" onclick="togglePhotoGuidelines(false)" title="Collapse">✕</button>
-                  </div>
-                  <div class="guideline-list-items">
-                    <div class="guideline-list-row">
-                      <span class="mini-tick">✓</span>
-                      <span>Clear front-facing face in good lighting.</span>
-                    </div>
-                    <div class="guideline-list-row">
-                      <span class="mini-tick">✓</span>
-                      <span>No cap, helmet, or sunglasses blocking eyes.</span>
-                    </div>
-                    <div class="guideline-list-row">
-                      <span class="mini-tick">✓</span>
-                      <span>Single person in frame, centered in crop box.</span>
-                    </div>
-                    <div class="guideline-list-row">
-                      <span class="mini-tick">✓</span>
-                      <span>Neutral background with no restricted content.</span>
-                    </div>
-                  </div>
-                </div>
-              ` : `
-                <div class="guideline-reopen-bar" onclick="togglePhotoGuidelines(true)">
-                  <span>Photo Guidelines (4)</span>
-                  <span>+</span>
-                </div>
-              `}
-            </div>
+            ${tips}
+            ${frame}
+            ${failAlert}
+            ${ctas}
           </div>
 
           <div class="sheet-footer">
-            <button class="primary-cta" ${!pReady ? 'disabled' : ''} onclick="goToStep(35)">
-              Next
+            <button class="primary-cta" ${!passed ? 'disabled' : ''} onclick="goToStep(35)">
+              Next: Record your voice
             </button>
           </div>
         </div>
@@ -1897,161 +2071,160 @@
       `;
     }
 
-    // 3B. DEDICATED AUDIO / VOICE PAGE
+    // 3B. VOICE PAGE — tips → script → big mic → review; upload + default voice as alternatives
     function renderStep35() {
       const a = state.audio;
-      const aReady = a.status === 'recorded' || a.status === 'uploaded' || a.status === 'skipped';
-      const showScriptBox = a.status === 'script_ready' || a.status === 'recording' || a.status === 'recorded';
+      const st = a.status;
+      const isCounting = st === 'countdown';
+      const isRec = st === 'recording';
+      const hasVoice = st === 'review' || st === 'uploaded';
+      const canStartFresh = ['idle', 'too_short', 'mic_denied', 'upload_error'].includes(st);
+      const showScript = !['uploaded', 'skipped'].includes(st);
+      const phraseIdx = isRec ? currentPhraseIndex(a.seconds) : -1;
+
+      const tips = a.guidelinesOpen ? `
+        <div class="tips-card">
+          <div class="tips-head">
+            <span>Before you record</span>
+            <button class="guideline-close-x" onclick="toggleAudioGuidelines(false)" title="Hide tips">✕</button>
+          </div>
+          <div class="tips-numbered">
+            <div class="tip-line"><b>1</b><span>Find a quiet spot away from machines and traffic.</span></div>
+            <div class="tip-line"><b>2</b><span>Hold the phone about 6 inches from your mouth.</span></div>
+            <div class="tip-line"><b>3</b><span>Read the script below clearly at a normal pace.</span></div>
+            <div class="tip-line"><b>4</b><span>Speak for 25–30 sec — recording stops at 30s.</span></div>
+          </div>
+        </div>
+      ` : `<button class="tips-reopen" onclick="toggleAudioGuidelines(true)">View recording tips</button>`;
+
+      const script = showScript ? `
+        <div class="script-card">
+          <div class="script-card-head"><span>Read this aloud</span><span>about 27 sec</span></div>
+          <div class="script-scroll ${isRec ? 'live' : 'idle'} ${isCounting ? 'live' : ''}" id="scriptBox">${SCRIPT_PHRASES.map((ph, i) => `<span class="script-phrase ${isRec && i < phraseIdx ? 'done' : ''} ${i === phraseIdx ? 'current' : ''}">${ph}</span>`).join(' ')}</div>
+        </div>
+      ` : '';
+
+      let recorder = '';
+      if (canStartFresh) {
+        recorder = `
+          <div class="recorder-zone">
+            <button class="mic-big" onclick="startRecordFlow()" title="Start recording">${ICONS.mic}</button>
+            <div class="mic-label">${st === 'too_short' ? 'Tap to record again' : 'Tap to start recording'}</div>
+          </div>
+          ${st === 'too_short' ? `<div class="inline-alert bad"><div><b>Too short (${fmtTime(a.duration)}).</b> Please record for at least 25 seconds so we can clone your voice.</div></div>` : ''}
+          ${st === 'mic_denied' ? `<div class="inline-alert bad"><div><b>Microphone is blocked.</b> Allow microphone access in your browser settings and try again, or upload a recording instead.</div></div>` : ''}
+          ${st === 'upload_error' ? `<div class="inline-alert bad"><div><b>File not accepted.</b> ${a.uploadError}</div></div>` : ''}
+          <div class="alt-actions">
+            <button class="alt-upload-btn" onclick="pickAudioFile()">${ICONS.upload}<span>Upload an audio file instead</span></button>
+            <span class="alt-hint">MP3 or M4A · 25–30 seconds</span>
+          </div>
+        `;
+      } else if (isCounting) {
+        recorder = `
+          <div class="recorder-zone">
+            <button class="mic-big counting" onclick="cancelCountdown()" title="Cancel"><span id="micCount">${a.countdown}</span></button>
+            <div class="mic-label">Get ready… start reading when it hits zero</div>
+          </div>
+        `;
+      } else if (isRec) {
+        recorder = `
+          <div class="recorder-zone">
+            <button class="mic-big recording" onclick="stopRecording()" title="Stop recording"><span class="stop-square"></span></button>
+            <div class="mic-label">Tap to stop</div>
+            <div class="rec-meta">
+              <div class="rec-time-row"><span id="recTime">● ${fmtTime(a.seconds)}</span><span>max 0:30</span></div>
+              <div class="rec-track">
+                <div class="rec-track-fill" id="recFill"></div>
+                <div class="rec-marker"></div>
+                <div class="rec-marker-label">25s</div>
+              </div>
+              <div class="level-meter" id="levelMeter">${'<span></span>'.repeat(16)}</div>
+              <div class="level-warn ok" id="levelWarn">Good level — keep going</div>
+            </div>
+          </div>
+        `;
+      } else if (st === 'review') {
+        recorder = `
+          <div class="recorder-zone" style="align-items:stretch;">
+            <div class="player-row">
+              <button class="play-btn-round" onclick="togglePlayback()" title="${a.playing ? 'Pause' : 'Play'}">
+                ${a.playing ? '<span class="pause-bars"><span></span><span></span></span>' : ICONS.play}
+              </button>
+              <div class="player-mid">
+                <div class="player-name">Your recording</div>
+                <div class="player-track"><div class="player-fill" id="playFill"></div></div>
+                <div class="player-time" id="playTime">0:00 / ${fmtTime(a.duration)}</div>
+              </div>
+              <button class="delete-icon-btn" onclick="resetAudio()" title="Delete recording">${ICONS.trash}</button>
+            </div>
+            ${a.quality === 'ok'
+              ? `<span class="quality-chip ok">✓ Clear voice — ready to use</span>`
+              : `<span class="quality-chip warn">Background noise detected — try re-recording somewhere quieter</span>`}
+            <div class="review-actions">
+              <button class="btn-secondary-outline" style="height:42px; font-size:13px;" onclick="startRecordFlow()">${ICONS.mic}<span>Re-record</span></button>
+            </div>
+          </div>
+        `;
+      } else if (st === 'uploaded') {
+        recorder = `
+          <div class="recorder-zone" style="align-items:stretch;">
+            <div class="player-row">
+              <button class="play-btn-round" onclick="togglePlayback()" title="${a.playing ? 'Pause' : 'Play'}">
+                ${a.playing ? '<span class="pause-bars"><span></span><span></span></span>' : ICONS.play}
+              </button>
+              <div class="player-mid">
+                <div class="player-name">${a.fileName}</div>
+                <div class="player-track"><div class="player-fill" id="playFill"></div></div>
+                <div class="player-time" id="playTime">0:00 / ${fmtTime(a.duration)}</div>
+              </div>
+              <button class="delete-icon-btn" onclick="resetAudio()" title="Remove file">${ICONS.trash}</button>
+            </div>
+            <span class="quality-chip ok">✓ File accepted — ${fmtTime(a.duration)} long</span>
+          </div>
+        `;
+      } else if (st === 'skipped') {
+        recorder = `
+          <div class="default-voice-card">
+            <h4>Default voice selected</h4>
+            <p>We'll use a standard Castrol voice for your video. Your video sounds more like you if you record your own voice.</p>
+            <div class="row">
+              <button class="sample-btn" onclick="playDefaultSample()">${a.samplePlaying ? '■ Stop sample' : ICONS.play + '<span>Hear sample</span>'}</button>
+              <button class="link-btn" onclick="resetAudio()">Record my voice instead</button>
+            </div>
+          </div>
+        `;
+      }
+
+      const skipZone = canStartFresh ? `
+        <div class="skip-zone">
+          <div class="skip-row">
+            <button class="link-btn" onclick="skipAudio()">Skip — use a default voice</button>
+            <button class="sample-btn" onclick="playDefaultSample()">${a.samplePlaying ? '■ Stop' : ICONS.play + '<span>Hear sample</span>'}</button>
+          </div>
+        </div>
+      ` : '';
+
+      const footerLabel = hasVoice ? 'Generate Clip' : 'Generate with default voice';
 
       return `
         ${renderTopHeader(3)}
         <div class="white-sheet">
-          <div class="sheet-body" style="justify-content:flex-start; gap:16px;">
+          <div class="sheet-body" style="justify-content:flex-start; gap:12px;">
+            ${renderFlowProgress(2, 'Your voice')}
             <div class="screen-header-block">
-              <h2 class="screen-title">Voice recording</h2>
-              <p class="screen-subtitle">Record or upload your 25–30s voice script, or skip to use default audio.</p>
+              <h2 class="screen-title">Record your voice</h2>
+              <p class="screen-subtitle">Optional, but your video sounds more like you when you record.</p>
             </div>
-
-            <!-- VOICE (OPTIONAL) + RECORD START/STOP ICON + COLLAPSIBLE AUDIO GUIDELINES -->
-            <div class="section-card" style="padding:18px; gap:14px;">
-              <div class="section-header-row" style="margin-bottom:0;">
-                <div class="section-step-title">
-                  <span class="step-num-badge">2</span>
-                  Your Voice <span style="font-size:11.5px; font-weight:400; color:#6B7280;">(Optional)</span>
-                </div>
-                ${a.status === 'skipped' ? `
-                  <span class="valid-pill">✓ Default Audio</span>
-                ` : aReady ? `
-                  <span class="valid-pill">✓ Ready</span>
-                ` : ''}
-              </div>
-
-              ${showScriptBox ? `
-                <!-- SCRIPT BOX WITH PREDEFINED HIGHLIGHT TRANSCRIPT & RECORD START/STOP ICON -->
-                <div class="script-box-compact" style="margin-bottom:0;">
-                  <div class="script-meta">
-                    <span>Read Out Loud Script (100 Words)</span>
-                    <span style="color:${a.status === 'recording' ? 'var(--castrol-red)' : 'var(--castrol-green-dark)'};">
-                      ${a.status === 'recording' ? '● REC 0:18 / 0:30' : a.status === 'recorded' ? '✓ Recorded 0:28' : '25–30s'}
-                    </span>
-                  </div>
-                  <div class="script-scroll-area" style="max-height:140px;">
-                    ${LOREM_100_WORDS}
-                  </div>
-                </div>
-              ` : a.status === 'uploaded' ? `
-                <div class="script-box-compact" style="align-items:center; justify-content:center; text-align:center; padding:16px 14px; margin-bottom:0;">
-                  <div class="upload-squircle" style="width:40px; height:40px; border-radius:12px; margin-bottom:6px;">
-                    ${ICONS.upload}
-                  </div>
-                  <div style="font-size:13px; font-weight:700; color:#111827; margin-bottom:2px;">Audio File Uploaded</div>
-                  <div style="font-size:11.5px; color:#4B5563;">${a.fileName}</div>
-                </div>
-              ` : a.status === 'skipped' ? `
-                <div class="script-box-compact" style="align-items:center; justify-content:center; text-align:center; padding:14px; margin-bottom:0;">
-                  <div style="font-size:12.5px; font-weight:700; color:var(--castrol-green-dark); margin-bottom:2px;">Default AI Voice Selected</div>
-                  <div style="font-size:11.5px; color:#4B5563;">A default voice track will be generated for your video.</div>
-                </div>
-              ` : ''}
-
-              ${a.status === 'script_ready' ? `
-                <div class="audio-ready-bar">
-                  <div style="display:flex; align-items:center; gap:10px;">
-                    <button class="rec-ctrl-icon-btn" onclick="beginMicCapture()" title="Start Recording">
-                      ${ICONS.recStart}
-                    </button>
-                    <div>
-                      <div style="font-size:12.5px; font-weight:700; color:#111827;">Tap Start Icon to Record</div>
-                      <div style="font-size:11px; color:#6B7280;">0:00 / 0:30</div>
-                    </div>
-                  </div>
-                  <button class="delete-icon-btn" onclick="resetAudio()" title="Close Script">
-                    ${ICONS.trash}
-                  </button>
-                </div>
-              ` : a.status === 'recording' ? `
-                <div class="audio-ready-bar" style="border-color:var(--castrol-red-border); background:var(--castrol-red-soft);">
-                  <div style="display:flex; align-items:center; gap:10px;">
-                    <button class="rec-ctrl-icon-btn active-stop" onclick="finishAudioRecording()" title="Stop Recording">
-                      ${ICONS.recStop}
-                    </button>
-                    <div>
-                      <div style="font-size:12.5px; font-weight:700; color:var(--castrol-red);">Recording... Tap Stop Icon</div>
-                      <div style="font-size:11px; color:var(--castrol-red);">0:18 / 0:30</div>
-                    </div>
-                  </div>
-                  <div class="waveform-mini recording">
-                    <span style="height:10px;"></span><span style="height:18px;"></span><span style="height:14px;"></span><span style="height:20px;"></span><span style="height:12px;"></span>
-                  </div>
-                </div>
-              ` : aReady ? `
-                <div class="audio-ready-bar">
-                  <div style="display:flex; align-items:center; gap:8px;">
-                    <div class="waveform-mini">
-                      <span style="height:9px;"></span><span style="height:16px;"></span><span style="height:20px;"></span><span style="height:12px;"></span><span style="height:18px;"></span>
-                    </div>
-                    <div style="font-size:12.5px; font-weight:700; color:#111827;">
-                      ${a.status === 'uploaded' ? a.fileName : a.status === 'skipped' ? 'Default Audio Track (0:30)' : 'Recorded Clip (0:28)'}
-                    </div>
-                  </div>
-                  <button class="delete-icon-btn" onclick="resetAudio()" title="Delete Audio">
-                    ${ICONS.trash}
-                  </button>
-                </div>
-              ` : `
-                <div class="audio-dual-grid">
-                  <button class="compact-action-btn" style="justify-content:center; min-height:52px;" onclick="startAudioRecording()">
-                    <span class="mini-icon" style="background:var(--castrol-red-soft);color:var(--castrol-red);">${ICONS.mic}</span>
-                    <span>Record Audio</span>
-                  </button>
-                  <button class="compact-action-btn" style="justify-content:center; min-height:52px;" onclick="uploadAudioFile()">
-                    <span class="mini-icon">${ICONS.upload}</span>
-                    <span>Upload Audio</span>
-                  </button>
-                </div>
-                <button class="default-audio-btn" onclick="skipAudio()">
-                  <span>Use Default Audio (Skip Recording)</span>
-                </button>
-              `}
-
-              <!-- 4 AUDIO-SPECIFIC GUIDELINES LISTED DOWN & COLLAPSIBLE WITH CROSS BUTTON -->
-              ${state.audio.guidelinesOpen ? `
-                <div class="guideline-collapse-box">
-                  <div class="guideline-collapse-top">
-                    <span class="guideline-collapse-title">Audio Guidelines</span>
-                    <button class="guideline-close-x" onclick="toggleAudioGuidelines(false)" title="Collapse">✕</button>
-                  </div>
-                  <div class="guideline-list-items">
-                    <div class="guideline-list-row">
-                      <span class="mini-tick">✓</span>
-                      <span>Record in a quiet spot away from garage noise.</span>
-                    </div>
-                    <div class="guideline-list-row">
-                      <span class="mini-tick">✓</span>
-                      <span>Hold phone 6 inches away & speak clearly for 25–30s.</span>
-                    </div>
-                    <div class="guideline-list-row">
-                      <span class="mini-tick">✓</span>
-                      <span>Read the script with zero profanity or restricted words.</span>
-                    </div>
-                    <div class="guideline-list-row">
-                      <span class="mini-tick">✓</span>
-                      <span>Optional step — skip anytime to use default audio.</span>
-                    </div>
-                  </div>
-                </div>
-              ` : `
-                <div class="guideline-reopen-bar" onclick="toggleAudioGuidelines(true)">
-                  <span>Audio Guidelines (4)</span>
-                  <span>+</span>
-                </div>
-              `}
-            </div>
+            ${tips}
+            ${script}
+            ${recorder}
+            ${skipZone}
+            <input type="file" id="audioFileInput" accept=".mp3,.m4a,.aac,.wav,audio/mpeg,audio/mp4,audio/x-m4a,audio/aac,audio/wav" style="display:none;" onchange="handleAudioFile(this)" />
           </div>
 
           <div class="sheet-footer">
-            <button class="primary-cta" onclick="confirmChecklistAndSubmit()">
-              Generate Clip
+            <button class="primary-cta" ${(isRec || isCounting) ? 'disabled' : ''} onclick="generateFromAudio()">
+              ${footerLabel}
             </button>
           </div>
         </div>
@@ -2563,6 +2736,84 @@
         `;
       }
 
+      // PHOTO CHECK RESULT POPUP
+      if (state.photoCheck === 'checking') {
+        html += `
+          <div class="screen-modal-backdrop">
+            <div class="modal-card photo-check-card">
+              <div class="check-spinner"></div>
+              <h3>Checking your photo</h3>
+              <p class="sub">This only takes a few seconds.</p>
+              <div class="check-steps">
+                <div class="check-step pending" style="animation-delay:.2s"><i>✓</i>Face detected</div>
+                <div class="check-step pending" style="animation-delay:.9s"><i>✓</i>Lighting and clarity</div>
+                <div class="check-step pending" style="animation-delay:1.6s"><i>✓</i>Content moderation</div>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (state.photoCheck === 'pass') {
+        html += `
+          <div class="screen-modal-backdrop">
+            <div class="modal-card photo-check-card">
+              <div style="display:flex; justify-content:flex-end;"><button class="modal-close-x" onclick="closePhotoCheck()">✕</button></div>
+              <div class="check-badge ok">✓</div>
+              <h3 style="color:var(--castrol-green);">Your photo looks good</h3>
+              <p class="sub">It's clear, well lit and ready for your video.</p>
+              <div class="check-steps">
+                <div class="check-step ok"><i>✓</i>Face clearly visible</div>
+                <div class="check-step ok"><i>✓</i>Good lighting and focus</div>
+                <div class="check-step ok"><i>✓</i>Passed content moderation</div>
+              </div>
+              <div class="modal-btn-stack">
+                <button class="primary-cta" style="height:46px;" onclick="photoCheckContinue()">Continue to voice</button>
+                <button class="btn-secondary-outline" style="height:44px; font-size:13px;" onclick="photoCheckRetake()">Retake photo</button>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (state.photoCheck === 'fail') {
+        html += `
+          <div class="screen-modal-backdrop">
+            <div class="modal-card photo-check-card">
+              <div style="display:flex; justify-content:flex-end;"><button class="modal-close-x" onclick="closePhotoCheck()">✕</button></div>
+              <div class="check-badge bad">!</div>
+              <h3 style="color:var(--castrol-red);">This photo can't be used</h3>
+              <p class="sub">${state.photo.failReason}</p>
+              <div class="check-steps">
+                <div class="check-step bad"><i>✕</i>Face not clearly visible</div>
+                <div class="check-step bad"><i>✕</i>Too dark or blurry</div>
+                <div class="check-step ok"><i>✓</i>Passed content moderation</div>
+              </div>
+              <p class="sub" style="margin-top:-4px;">Tip: face a window or bright light and remove your cap or sunglasses.</p>
+              <div class="modal-btn-stack">
+                <button class="primary-cta" style="height:46px;" onclick="photoCheckRetake()">Retake photo</button>
+                <button class="btn-secondary-outline" style="height:44px; font-size:13px;" onclick="photoCheckUploadAnother()">Upload another photo</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // MIC PERMISSION PRE-PROMPT
+      if (state.showMicPermission) {
+        html += `
+          <div class="screen-modal-backdrop">
+            <div class="modal-card photo-check-card">
+              <div style="display:flex; justify-content:flex-end;"><button class="modal-close-x" onclick="dismissMicPermission()">✕</button></div>
+              <div class="check-badge bad" style="background:var(--castrol-red-soft);">${ICONS.mic}</div>
+              <h3>Allow microphone access</h3>
+              <p class="sub">We need your microphone to record your 25–30 second voice clip. It's only used to create your video.</p>
+              <p class="sub" style="margin-top:-6px; font-weight:600; color:#111827;">Your phone will ask next — tap <b>Allow</b>.</p>
+              <div class="modal-btn-stack">
+                <button class="primary-cta" style="height:46px;" onclick="allowMicAccess()">Allow microphone</button>
+                <button class="btn-secondary-outline" style="height:44px; font-size:13px;" onclick="dismissMicPermission()">Not now</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
       return html;
     }
 
@@ -2599,6 +2850,9 @@
     }
 
     function goToStep(stepNum) {
+      cleanupAudioCapture();
+      state.photoCheck = null;
+      state.showMicPermission = false;
       state.showInstructionsPopup = false;
       state.showModerationChecklistPopup = false;
       state.showLimitModal = false;
@@ -2675,6 +2929,9 @@
     }
 
     function openPhotoModal(type) {
+      if (type === 'gallery') { state.photo.source = 'gallery'; type = 'crop'; }
+      else if (type === 'camera') { state.photo.source = 'camera'; }
+      state.photoCheck = null;
       state.photoModal = type;
       render();
     }
@@ -2695,13 +2952,40 @@
     }
 
     function applyPhotoCrop() {
-      state.photo.status = 'uploaded';
       state.photoModal = null;
-      render();
+      runPhotoCheck();
     }
+
+    // Prototype moderation: the first gallery upload fails (dark/blurry) to show the rejection path; everything else passes.
+    function runPhotoCheck() {
+      state.photo.status = 'checking';
+      state.photoCheck = 'checking';
+      render();
+      setTimeout(() => {
+        if (state.photo.status !== 'checking') return;
+        const shouldFail = state.photo.source === 'gallery' && !state.photo.galleryFailedOnce;
+        if (shouldFail) {
+          state.photo.galleryFailedOnce = true;
+          state.photo.status = 'failed';
+          state.photo.failReason = "We couldn't see your face clearly — the photo looks too dark or blurry.";
+          state.photoCheck = 'fail';
+        } else {
+          state.photo.status = 'passed';
+          state.photo.guidelinesOpen = false;
+          state.photoCheck = 'pass';
+        }
+        render();
+      }, 2300);
+    }
+
+    function closePhotoCheck() { state.photoCheck = null; render(); }
+    function photoCheckContinue() { state.photoCheck = null; goToStep(35); }
+    function photoCheckRetake() { state.photoCheck = null; openPhotoModal('camera'); }
+    function photoCheckUploadAnother() { state.photoCheck = null; openPhotoModal('gallery'); }
 
     function deletePhoto() {
       state.photo.status = 'empty';
+      state.photo.guidelinesOpen = true;
       render();
     }
 
@@ -2715,40 +2999,296 @@
       render();
     }
 
-    function startAudioRecording() {
-      state.audio.status = 'script_ready';
-      state.audio.seconds = 0;
+    // ---------- VOICE CAPTURE ----------
+    let recInterval = null, countInterval = null, playInterval = null;
+    let mediaStream = null, mediaRecorder = null, recChunks = [];
+    let audioCtx = null, analyser = null, levelData = null, playbackAudio = null;
+    let quietTicks = 0, noisyTicks = 0;
+
+    function $id(id) { return document.getElementById(id); }
+
+    function stopMediaStream() {
+      if (mediaStream) { mediaStream.getTracks().forEach(t => t.stop()); mediaStream = null; }
+      if (audioCtx) { try { audioCtx.close(); } catch (e) {} audioCtx = null; analyser = null; }
+    }
+
+    function clearAudioTimers() {
+      clearInterval(recInterval); clearInterval(countInterval); clearInterval(playInterval);
+      recInterval = countInterval = playInterval = null;
+      if (playbackAudio) { playbackAudio.pause(); playbackAudio = null; }
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+      state.audio.playing = false;
+      state.audio.samplePlaying = false;
+    }
+
+    function cleanupAudioCapture() {
+      clearAudioTimers();
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') { mediaRecorder.onstop = null; try { mediaRecorder.stop(); } catch (e) {} }
+      mediaRecorder = null;
+      stopMediaStream();
+      if (['recording', 'countdown'].includes(state.audio.status)) state.audio.status = 'idle';
+    }
+
+    function startRecordFlow() {
+      cleanupAudioCapture();
+      if (!state.audio.micAsked) {
+        state.showMicPermission = true;
+        render();
+        return;
+      }
+      requestMicThenCount();
+    }
+
+    function allowMicAccess() {
+      state.showMicPermission = false;
+      state.audio.micAsked = true;
+      requestMicThenCount();
+    }
+
+    function dismissMicPermission() {
+      state.showMicPermission = false;
       render();
     }
 
-    function beginMicCapture() {
-      state.audio.status = 'recording';
-      state.audio.seconds = 18;
+    function requestMicThenCount() {
+      const embedded = window.self !== window.top || !window.isSecureContext;
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder) {
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+          mediaStream = stream;
+          beginCountdown();
+        }).catch(err => {
+          const denied = err && (err.name === 'NotAllowedError' || err.name === 'SecurityError');
+          if (denied && !embedded) { state.audio.status = 'mic_denied'; render(); }
+          else { beginCountdown(); } // no usable mic (e.g. desktop preview) — simulate capture
+        });
+      } else {
+        beginCountdown();
+      }
+    }
+
+    function beginCountdown() {
+      state.audio.status = 'countdown';
+      state.audio.countdown = 3;
+      render();
+      countInterval = setInterval(() => {
+        state.audio.countdown -= 1;
+        if (state.audio.countdown > 0) {
+          const c = $id('micCount'); if (c) c.textContent = state.audio.countdown;
+        } else {
+          clearInterval(countInterval); countInterval = null;
+          startRecording();
+        }
+      }, 1000);
+    }
+
+    function cancelCountdown() {
+      cleanupAudioCapture();
+      state.audio.status = 'idle';
       render();
     }
 
-    function finishAudioRecording() {
-      state.audio.status = 'recorded';
-      state.audio.seconds = 28;
+    function startRecording() {
+      const a = state.audio;
+      if (a.blobUrl) { URL.revokeObjectURL(a.blobUrl); a.blobUrl = null; }
+      a.status = 'recording';
+      a.seconds = 0;
+      a.guidelinesOpen = false;
+      quietTicks = 0; noisyTicks = 0; recChunks = [];
+
+      if (mediaStream) {
+        try {
+          mediaRecorder = new MediaRecorder(mediaStream);
+          mediaRecorder.ondataavailable = e => { if (e.data && e.data.size) recChunks.push(e.data); };
+          mediaRecorder.start();
+        } catch (e) { mediaRecorder = null; }
+        try {
+          const AC = window.AudioContext || window.webkitAudioContext;
+          audioCtx = new AC();
+          const srcNode = audioCtx.createMediaStreamSource(mediaStream);
+          analyser = audioCtx.createAnalyser();
+          analyser.fftSize = 256;
+          levelData = new Uint8Array(analyser.fftSize);
+          srcNode.connect(analyser);
+        } catch (e) { analyser = null; }
+      }
+
+      render();
+      const t0 = Date.now();
+      recInterval = setInterval(() => {
+        a.seconds = (Date.now() - t0) / 1000;
+        updateRecordingUI();
+        if (a.seconds >= 30) stopRecording();
+      }, 100);
+    }
+
+    function updateRecordingUI() {
+      const s = state.audio.seconds;
+      const t = $id('recTime'); if (t) t.textContent = '● ' + fmtTime(s);
+      const f = $id('recFill'); if (f) f.style.width = Math.min(100, s / 30 * 100) + '%';
+
+      const idx = currentPhraseIndex(s);
+      const phrases = document.querySelectorAll('.script-phrase');
+      phrases.forEach((p, i) => { p.classList.toggle('done', i < idx); p.classList.toggle('current', i === idx); });
+      const box = $id('scriptBox');
+      const cur = phrases[idx];
+      if (box && cur) {
+        const target = Math.max(0, cur.offsetTop - 28);
+        if (Math.abs(box.scrollTop - target) > 4) box.scrollTo({ top: target, behavior: 'smooth' });
+      }
+
+      let level;
+      if (analyser) {
+        analyser.getByteTimeDomainData(levelData);
+        let sum = 0;
+        for (let i = 0; i < levelData.length; i++) { const d = (levelData[i] - 128) / 128; sum += d * d; }
+        level = Math.min(1, Math.sqrt(sum / levelData.length) * 5);
+      } else {
+        level = (s > 4 && s < 6.5) ? 0.06 + Math.random() * 0.05 : 0.35 + Math.random() * 0.5;
+      }
+      document.querySelectorAll('#levelMeter span').forEach((b, i) => {
+        const shape = 0.55 + 0.45 * Math.sin((i / 15) * Math.PI);
+        b.style.height = (4 + level * 26 * shape * (0.7 + Math.random() * 0.5)) + 'px';
+        b.classList.toggle('hot', level > 0.95);
+      });
+
+      if (level < 0.15) quietTicks++; else quietTicks = Math.max(0, quietTicks - 2);
+      if (level > 0.95) noisyTicks++;
+      const w = $id('levelWarn');
+      if (w) {
+        if (quietTicks > 10) { w.textContent = 'Too quiet — speak a little louder'; w.className = 'level-warn warn'; }
+        else if (level > 0.95) { w.textContent = 'Too loud or noisy — move away from machines'; w.className = 'level-warn warn'; }
+        else if (s >= 25) { w.textContent = 'Great — you can stop now'; w.className = 'level-warn ok'; }
+        else { w.textContent = 'Good level — keep going'; w.className = 'level-warn ok'; }
+      }
+    }
+
+    function stopRecording() {
+      clearInterval(recInterval); recInterval = null;
+      const a = state.audio;
+      const dur = a.seconds;
+      const finish = (url) => {
+        stopMediaStream();
+        a.blobUrl = url || null;
+        a.duration = dur;
+        if (dur < 25) { a.status = 'too_short'; }
+        else { a.status = 'review'; a.quality = noisyTicks > 25 ? 'noisy' : 'ok'; }
+        render();
+      };
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        const rec = mediaRecorder;
+        rec.onstop = () => {
+          const blob = new Blob(recChunks, { type: rec.mimeType || 'audio/webm' });
+          finish(blob.size ? URL.createObjectURL(blob) : null);
+        };
+        mediaRecorder = null;
+        rec.stop();
+      } else {
+        finish(null);
+      }
+    }
+
+    function togglePlayback() {
+      const a = state.audio;
+      if (a.playing) { clearAudioTimers(); render(); return; }
+      clearAudioTimers();
+      a.playing = true;
+      render();
+      const dur = a.duration || 28;
+      if (a.blobUrl) {
+        playbackAudio = new Audio(a.blobUrl);
+        playbackAudio.play().catch(() => {});
+        playbackAudio.onended = () => { clearAudioTimers(); render(); };
+      }
+      const t0 = Date.now();
+      playInterval = setInterval(() => {
+        const t = playbackAudio ? playbackAudio.currentTime : (Date.now() - t0) / 1000;
+        const f = $id('playFill'); if (f) f.style.width = Math.min(100, t / dur * 100) + '%';
+        const tt = $id('playTime'); if (tt) tt.textContent = fmtTime(t) + ' / ' + fmtTime(dur);
+        if (!playbackAudio && t >= dur) { clearAudioTimers(); render(); }
+      }, 150);
+    }
+
+    function pickAudioFile() {
+      const i = $id('audioFileInput');
+      if (i) { i.value = ''; i.click(); }
+    }
+
+    function setUploadError(msg) {
+      state.audio.status = 'upload_error';
+      state.audio.uploadError = msg;
       render();
     }
 
-    function uploadAudioFile() {
-      state.audio.status = 'uploaded';
-      state.audio.fileName = 'voice_script.m4a (0:28)';
+    function acceptUpload(file, url, dur) {
+      const a = state.audio;
+      if (a.blobUrl) URL.revokeObjectURL(a.blobUrl);
+      a.status = 'uploaded';
+      a.fileName = file.name;
+      a.blobUrl = url;
+      a.duration = dur;
+      a.quality = 'ok';
+      render();
+    }
+
+    function handleAudioFile(input) {
+      const file = input.files && input.files[0];
+      if (!file) return;
+      cleanupAudioCapture();
+      const okType = /\.(mp3|m4a|aac|wav)$/i.test(file.name) || /audio\/(mpeg|mp4|x-m4a|aac|wav)/.test(file.type);
+      if (!okType) { setUploadError('Unsupported file type. Please upload an MP3 or M4A file.'); return; }
+      if (file.size > 15 * 1024 * 1024) { setUploadError('This file is too large. Please upload a file under 15 MB.'); return; }
+      const url = URL.createObjectURL(file);
+      const probe = new Audio();
+      probe.preload = 'metadata';
+      probe.onloadedmetadata = () => {
+        const d = probe.duration;
+        if (!isFinite(d)) { acceptUpload(file, url, 28); return; }
+        if (d < 25) { URL.revokeObjectURL(url); setUploadError(`This recording is only ${fmtTime(d)} long. Please upload a 25–30 second clip.`); }
+        else if (d > 30.5) { URL.revokeObjectURL(url); setUploadError(`This recording is ${fmtTime(d)} long. Please trim it to 25–30 seconds.`); }
+        else acceptUpload(file, url, d);
+      };
+      probe.onerror = () => acceptUpload(file, url, 28);
+      probe.src = url;
+    }
+
+    function playDefaultSample() {
+      const a = state.audio;
+      if (a.samplePlaying) { window.speechSynthesis && window.speechSynthesis.cancel(); a.samplePlaying = false; render(); return; }
+      if (!('speechSynthesis' in window)) {
+        showNotification('Default voice sample', 'Sample playback is not supported on this browser.');
+        return;
+      }
+      const workshop = state.form.workshopName.trim() || 'our workshop';
+      const u = new SpeechSynthesisUtterance(`Namaste! Welcome to ${workshop}. Trust Castrol Magnatec to protect your engine from the moment you start.`);
+      u.lang = 'en-IN';
+      u.rate = 0.95;
+      u.onend = () => { a.samplePlaying = false; render(); };
+      a.samplePlaying = true;
+      window.speechSynthesis.speak(u);
       render();
     }
 
     function skipAudio() {
+      cleanupAudioCapture();
       state.audio.status = 'skipped';
-      state.audio.fileName = '';
       render();
     }
 
     function resetAudio() {
-      state.audio.status = 'idle';
-      state.audio.fileName = '';
+      cleanupAudioCapture();
+      const a = state.audio;
+      if (a.blobUrl) { URL.revokeObjectURL(a.blobUrl); a.blobUrl = null; }
+      a.status = 'idle';
+      a.fileName = '';
+      a.seconds = 0;
+      a.duration = 0;
       render();
+    }
+
+    function generateFromAudio() {
+      cleanupAudioCapture();
+      if (!['review', 'uploaded'].includes(state.audio.status)) state.audio.status = 'skipped';
+      confirmChecklistAndSubmit();
     }
 
     function toggleWhatsAppOptIn() {
@@ -2786,7 +3326,10 @@
         toggleLimitModal(true);
       } else {
         state.photo.status = 'empty';
+        state.photo.guidelinesOpen = true;
+        if (state.audio.blobUrl) { URL.revokeObjectURL(state.audio.blobUrl); state.audio.blobUrl = null; }
         state.audio.status = 'idle';
+        state.audio.guidelinesOpen = true;
         goToStep(3);
       }
     }
