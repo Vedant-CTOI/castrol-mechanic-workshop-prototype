@@ -1375,13 +1375,36 @@
       gap: 8px;
     }
 
-    .share-icon-btn {
+    .share-highlight-btn {
+      height: 36px;
+      padding: 0 14px;
+      border-radius: 10px;
+      border: 1.5px solid var(--castrol-green);
+      background: var(--castrol-green);
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .share-highlight-btn:hover {
+      background: var(--castrol-green-dark);
+      border-color: var(--castrol-green-dark);
+    }
+
+    .download-icon-btn {
       width: 36px;
       height: 36px;
       border-radius: 10px;
-      border: 1.5px solid var(--castrol-green);
-      background: var(--castrol-green-soft);
-      color: var(--castrol-green);
+      border: 1.5px solid var(--border-neutral);
+      background: #FFFFFF;
+      color: var(--text-main);
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -1390,9 +1413,10 @@
       transition: all 0.15s ease;
     }
 
-    .share-icon-btn:hover {
-      background: var(--castrol-green);
-      color: #FFFFFF;
+    .download-icon-btn:hover {
+      border-color: var(--castrol-green);
+      color: var(--castrol-green);
+      background: var(--castrol-green-soft);
     }
 
     .drawer-sheet {
@@ -1551,7 +1575,8 @@
       recStart: `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>`,
       recStop: `<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="14" height="14" rx="2.5"/></svg>`,
       play: `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>`,
-      share: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`,
+      download: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`,
+      share: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`,
       whatsapp: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>`
     };
 
@@ -1773,27 +1798,21 @@
       `;
     }
 
-    // 3. COMBINED PHOTO + AUDIO SCREEN
+    // 3A. DEDICATED PHOTO UPLOAD PAGE
     function renderStep3() {
       const pReady = state.photo.status === 'uploaded';
-      const a = state.audio;
-      const aReady = a.status === 'recorded' || a.status === 'uploaded' || a.status === 'skipped';
-      // Audio is optional: user can generate clip as soon as photo is uploaded (default audio generated if skipped/idle)
-      const canSubmit = pReady;
-      const isAudioIdle = a.status === 'idle';
-      const showScriptBox = a.status === 'script_ready' || a.status === 'recording' || a.status === 'recorded';
 
       return `
         ${renderTopHeader(2)}
         <div class="white-sheet">
-          <div class="sheet-body" style="justify-content:flex-start; gap:14px;">
+          <div class="sheet-body" style="justify-content:flex-start; gap:16px;">
             <div class="screen-header-block">
-              <h2 class="screen-title">Photo & voice input</h2>
-              <p class="screen-subtitle">Capture or upload your photo and optional 25–30s voice clip.</p>
+              <h2 class="screen-title">Upload your photo</h2>
+              <p class="screen-subtitle">Capture a clear front-facing photo or upload one from your phone.</p>
             </div>
 
-            <!-- SECTION 1: PHOTO CAPTURE OR UPLOAD + CROP + SPECIFIC PHOTO GUIDELINE BOXES -->
-            <div class="section-card" style="padding:16px; gap:12px;">
+            <!-- PHOTO CAPTURE OR UPLOAD + CROP + COLLAPSIBLE PHOTO GUIDELINES -->
+            <div class="section-card" style="padding:18px; gap:14px;">
               <div class="section-header-row" style="margin-bottom:0;">
                 <div class="section-step-title">
                   <span class="step-num-badge">1</span>
@@ -1811,8 +1830,8 @@
                 ` : ''}
               </div>
 
-              <div class="photo-compact-grid">
-                <div class="photo-thumb-box ${pReady ? 'has-photo' : ''}" onclick="${pReady ? `openPhotoModal('crop')` : `openPhotoModal('camera')`}">
+              <div class="photo-compact-grid" style="grid-template-columns: 120px 1fr; gap:14px;">
+                <div class="photo-thumb-box ${pReady ? 'has-photo' : ''}" style="width:120px; height:120px;" onclick="${pReady ? `openPhotoModal('crop')` : `openPhotoModal('camera')`}">
                   ${pReady ? `
                     ${getMechanicPortraitSVG(state.cropZoom)}
                   ` : `
@@ -1866,17 +1885,41 @@
                 </div>
               `}
             </div>
+          </div>
 
-            <!-- SECTION 2: PHASE 2 VOICE (FADED UNTIL PHOTO IS UPLOADED) -->
-            <div class="section-card ${pReady ? '' : 'phase-locked'}" style="padding:16px; gap:12px;">
+          <div class="sheet-footer">
+            <button class="primary-cta" ${!pReady ? 'disabled' : ''} onclick="goToStep(35)">
+              Next
+            </button>
+          </div>
+        </div>
+        ${renderModals()}
+      `;
+    }
+
+    // 3B. DEDICATED AUDIO / VOICE PAGE
+    function renderStep35() {
+      const a = state.audio;
+      const aReady = a.status === 'recorded' || a.status === 'uploaded' || a.status === 'skipped';
+      const showScriptBox = a.status === 'script_ready' || a.status === 'recording' || a.status === 'recorded';
+
+      return `
+        ${renderTopHeader(3)}
+        <div class="white-sheet">
+          <div class="sheet-body" style="justify-content:flex-start; gap:16px;">
+            <div class="screen-header-block">
+              <h2 class="screen-title">Voice recording</h2>
+              <p class="screen-subtitle">Record or upload your 25–30s voice script, or skip to use default audio.</p>
+            </div>
+
+            <!-- VOICE (OPTIONAL) + RECORD START/STOP ICON + COLLAPSIBLE AUDIO GUIDELINES -->
+            <div class="section-card" style="padding:18px; gap:14px;">
               <div class="section-header-row" style="margin-bottom:0;">
                 <div class="section-step-title">
                   <span class="step-num-badge">2</span>
                   Your Voice <span style="font-size:11.5px; font-weight:400; color:#6B7280;">(Optional)</span>
                 </div>
-                ${!pReady ? `
-                  <span style="font-size:11px; font-weight:600; color:#9CA3AF;">Upload photo first</span>
-                ` : a.status === 'skipped' ? `
+                ${a.status === 'skipped' ? `
                   <span class="valid-pill">✓ Default Audio</span>
                 ` : aReady ? `
                   <span class="valid-pill">✓ Ready</span>
@@ -1892,7 +1935,7 @@
                       ${a.status === 'recording' ? '● REC 0:18 / 0:30' : a.status === 'recorded' ? '✓ Recorded 0:28' : '25–30s'}
                     </span>
                   </div>
-                  <div class="script-scroll-area">
+                  <div class="script-scroll-area" style="max-height:140px;">
                     ${LOREM_100_WORDS}
                   </div>
                 </div>
@@ -1957,11 +2000,11 @@
                 </div>
               ` : `
                 <div class="audio-dual-grid">
-                  <button class="compact-action-btn" style="justify-content:center; min-height:50px;" onclick="startAudioRecording()">
+                  <button class="compact-action-btn" style="justify-content:center; min-height:52px;" onclick="startAudioRecording()">
                     <span class="mini-icon" style="background:var(--castrol-red-soft);color:var(--castrol-red);">${ICONS.mic}</span>
                     <span>Record Audio</span>
                   </button>
-                  <button class="compact-action-btn" style="justify-content:center; min-height:50px;" onclick="uploadAudioFile()">
+                  <button class="compact-action-btn" style="justify-content:center; min-height:52px;" onclick="uploadAudioFile()">
                     <span class="mini-icon">${ICONS.upload}</span>
                     <span>Upload Audio</span>
                   </button>
@@ -2007,7 +2050,7 @@
           </div>
 
           <div class="sheet-footer">
-            <button class="primary-cta" ${!canSubmit ? 'disabled' : ''} onclick="confirmChecklistAndSubmit()">
+            <button class="primary-cta" onclick="confirmChecklistAndSubmit()">
               Generate Clip
             </button>
           </div>
@@ -2019,7 +2062,7 @@
     // 4. THANK YOU PAGE
     function renderStep4() {
       return `
-        ${renderTopHeader(3)}
+        ${renderTopHeader(35)}
         <div class="white-sheet">
           <div class="sheet-body">
             <div class="soft-dropzone">
@@ -2046,7 +2089,7 @@
       `;
     }
 
-    // 5. DUMMY PAGE: MY GALLERY (FIRST VIDEO LEADING + SHARE ICON ON ALL VIDEOS)
+    // 5. DUMMY PAGE: MY GALLERY (FIRST VIDEO LEADING + HIGHLIGHTED SHARE BUTTON + DOWNLOAD ICON BUTTON)
     function renderStep5() {
       const displayWorkshop = state.form.workshopName.trim() || 'Sharma Auto Care';
       const displayPhone = state.form.whatsapp.trim() ? '+91 ' + state.form.whatsapp.trim() : '+91 98201 44510';
@@ -2082,11 +2125,12 @@
                     <div class="gallery-entry-sub">${leadVideo.meta}</div>
                   </div>
                   <div class="gallery-action-row">
-                    <button class="btn-outline-neutral gallery-btn-sm" style="padding:0 12px; height:36px;" onclick="showNotification('File is downloaded', '${leadVideo.title}.mp4 has been saved to your device.')">
-                      Download
+                    <button class="download-icon-btn" title="Download Video" onclick="showNotification('File is downloaded', '${leadVideo.title}.mp4 has been saved to your device.')">
+                      ${ICONS.download}
                     </button>
-                    <button class="share-icon-btn" title="Share Video" onclick="showNotification('Share Video', '${leadVideo.title} link shared to ${displayPhone}.')">
+                    <button class="share-highlight-btn" onclick="showNotification('Share Video', '${leadVideo.title} link shared to ${displayPhone}.')">
                       ${ICONS.share}
+                      <span>Share</span>
                     </button>
                   </div>
                 </div>
@@ -2109,11 +2153,12 @@
                       <div class="gallery-entry-sub">${item.meta}</div>
                     </div>
                     <div class="gallery-action-row" style="margin-top:4px;">
-                      <button class="btn-outline-neutral gallery-btn-sm" style="flex:1; height:36px;" onclick="showNotification('File is downloaded', '${item.title}.mp4 has been saved to your device.')">
-                        Download
+                      <button class="download-icon-btn" title="Download Video" onclick="showNotification('File is downloaded', '${item.title}.mp4 has been saved to your device.')">
+                        ${ICONS.download}
                       </button>
-                      <button class="share-icon-btn" title="Share Video" onclick="showNotification('Share Video', '${item.title} link shared to ${displayPhone}.')">
+                      <button class="share-highlight-btn" style="flex:1;" onclick="showNotification('Share Video', '${item.title} link shared to ${displayPhone}.')">
                         ${ICONS.share}
+                        <span>Share</span>
                       </button>
                     </div>
                   </div>
@@ -2530,6 +2575,7 @@
       if (state.step === 1) appEl.innerHTML = renderStep1();
       else if (state.step === 2) appEl.innerHTML = renderStep2();
       else if (state.step === 3) appEl.innerHTML = renderStep3();
+      else if (state.step === 35) appEl.innerHTML = renderStep35();
       else if (state.step === 4) appEl.innerHTML = renderStep4();
       else if (state.step === 5) appEl.innerHTML = renderStep5();
       else if (state.step === 6) appEl.innerHTML = renderStep6();
@@ -2563,7 +2609,7 @@
     }
 
     function openMenuPage(targetStep) {
-      if (state.step >= 2 && state.step <= 4) {
+      if ((state.step >= 2 && state.step <= 4) || state.step === 35) {
         state.previousStep = state.step;
       }
       state.showMenuDrawer = false;
