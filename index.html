@@ -2045,14 +2045,9 @@
         </div>
       ` : `<button class="tips-reopen" onclick="togglePhotoGuidelines(true)">View photo tips</button>`;
 
-      const frame = `
-        <div class="capture-frame ${passed ? 'has-photo' : ''} ${failed ? 'is-failed' : ''}" ${(!passed && !checking) ? `onclick="openPhotoModal('camera')"` : ''}>
-          ${(passed || checking || failed) ? `
-            <div class="capture-photo" style="${failed ? 'filter:brightness(0.55) blur(1.5px);' : ''}">${getMechanicPortraitSVG(state.cropZoom)}</div>
-          ` : `
-            ${FACE_OUTLINE_SVG}
-            <div class="capture-hint">Position your face inside the outline</div>
-          `}
+      const frame = (passed || checking || failed) ? `
+        <div class="capture-frame ${passed ? 'has-photo' : ''} ${failed ? 'is-failed' : ''}">
+          <div class="capture-photo" style="${failed ? 'filter:brightness(0.55) blur(1.5px);' : ''}">${getMechanicPortraitSVG(state.cropZoom)}</div>
           ${checking ? `<div class="capture-scan">Checking your photo…</div>` : ''}
           ${passed ? `
             <span class="status-chip ok">✓ Looks great</span>
@@ -2064,7 +2059,7 @@
           ` : ''}
           ${failed ? `<span class="status-chip bad">✕ Can't be used</span>` : ''}
         </div>
-      `;
+      ` : '';
 
       const failAlert = failed ? `
         <div class="inline-alert bad">
