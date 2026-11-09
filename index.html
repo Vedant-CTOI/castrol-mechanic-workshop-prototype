@@ -1587,6 +1587,16 @@
     .default-voice-card h4 { font-size:14px; font-weight:700; color:var(--castrol-green-dark); }
     .default-voice-card p { font-size:12px; color:#374151; line-height:1.45; }
     .default-voice-card .row { display:flex; gap:12px; align-items:center; margin-top:2px; }
+
+    /* SPLIT NAME ROW + VIDEO LIMIT NOTE */
+    .name-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .name-row .input-box { padding-right:46px; }
+    .limit-note { margin-top:8px; text-align:center; font-size:11px; font-weight:600; color:var(--text-sub); font-variant-numeric:tabular-nums; }
+    .limit-note b { color:var(--castrol-green-dark); font-weight:700; }
+    .limit-note.maxed b { color:var(--castrol-red); }
+    .gallery-empty { border:1.5px dashed var(--castrol-green-border); background:var(--castrol-green-soft); border-radius:16px; padding:28px 18px; text-align:center; display:flex; flex-direction:column; gap:6px; }
+    .gallery-empty h4 { font-size:15px; font-weight:700; color:var(--castrol-green-dark); }
+    .gallery-empty p { font-size:12.5px; color:#374151; line-height:1.45; }
   </style>
 </head>
 <body>
@@ -1625,7 +1635,8 @@
     const LOREM_100_WORDS = `<span class="script-highlight">Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span> Ut enim ad minim veniam <span class="script-highlight">quis nostrud exercitation ullamco laboris nisi ut aliquip</span> ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. <span class="script-highlight">Excepteur sint occaecat cupidatat non proident</span> sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus nulla gravida orci a odio nullam varius turpis et commodo pharetra est eros bibendum elit nec luctus magna felis sollicitudin mauris integer in mauris eu nibh euismod.`;
 
     const FIELD_LIMITS = {
-      name: 40,
+      firstName: 30,
+      lastName: 30,
       email: 60,
       whatsapp: 10,
       workshopName: 50,
@@ -1644,8 +1655,8 @@
       // 8: Privacy Policy (Dummy Page)
       step: 1,
       previousStep: 2,
-      attemptsUsed: 1,
-      maxAttempts: 3,
+      videosGenerated: 0,
+      maxVideos: 2,
 
       // Brand Loading Screen state
       isLoading: false,
@@ -1662,7 +1673,8 @@
       cropZoom: 1.15,
 
       form: {
-        name: '',
+        firstName: '',
+        lastName: '',
         email: '',
         whatsapp: '',
         workshopName: '',
@@ -1837,18 +1849,35 @@
             </div>
 
             <div class="form-fields-stack">
-              <div class="input-wrap">
-                <input
-                  type="text"
-                  maxlength="${FIELD_LIMITS.name}"
-                  class="input-box ${hasProfanity ? 'error' : ''}"
-                  value="${f.name}"
-                  placeholder="Full Name *"
-                  oninput="handleFormInput('name', this.value)"
-                />
-                <span class="char-counter ${f.name.length >= FIELD_LIMITS.name ? 'at-limit' : ''}">
-                  ${f.name.length}/${FIELD_LIMITS.name}
-                </span>
+              <div class="name-row">
+                <div class="input-wrap">
+                  <input
+                    type="text"
+                    maxlength="${FIELD_LIMITS.firstName}"
+                    class="input-box ${hasProfanity ? 'error' : ''}"
+                    value="${f.firstName}"
+                    placeholder="First Name *"
+                    autocomplete="given-name"
+                    oninput="handleFormInput('firstName', this.value)"
+                  />
+                  <span class="char-counter ${f.firstName.length >= FIELD_LIMITS.firstName ? 'at-limit' : ''}">
+                    ${f.firstName.length}/${FIELD_LIMITS.firstName}
+                  </span>
+                </div>
+                <div class="input-wrap">
+                  <input
+                    type="text"
+                    maxlength="${FIELD_LIMITS.lastName}"
+                    class="input-box ${hasProfanity ? 'error' : ''}"
+                    value="${f.lastName}"
+                    placeholder="Last Name *"
+                    autocomplete="family-name"
+                    oninput="handleFormInput('lastName', this.value)"
+                  />
+                  <span class="char-counter ${f.lastName.length >= FIELD_LIMITS.lastName ? 'at-limit' : ''}">
+                    ${f.lastName.length}/${FIELD_LIMITS.lastName}
+                  </span>
+                </div>
               </div>
 
               <div class="input-wrap">
@@ -1962,6 +1991,14 @@
     function currentPhraseIndex(sec) {
       const per = 27 / SCRIPT_PHRASES.length;
       return Math.min(SCRIPT_PHRASES.length - 1, Math.floor(sec / per));
+    }
+
+    function renderLimitNote(mode) {
+      const used = state.videosGenerated, max = state.maxVideos;
+      if (mode === 'next') {
+        return `<div class="limit-note">This will be video <b>${used + 1}/${max}</b></div>`;
+      }
+      return `<div class="limit-note ${used >= max ? 'maxed' : ''}">Videos generated <b>${used}/${max}</b></div>`;
     }
 
     function renderFlowProgress(stepNum, label) {
@@ -2226,6 +2263,7 @@
             <button class="primary-cta" ${(isRec || isCounting) ? 'disabled' : ''} onclick="generateFromAudio()">
               ${footerLabel}
             </button>
+            ${renderLimitNote('next')}
           </div>
         </div>
         ${renderModals()}
@@ -2256,6 +2294,7 @@
             <button class="btn-outline-neutral" style="width:100%; height:48px; font-size:14.5px; border-color:var(--castrol-green); color:var(--castrol-green);" onclick="handleCreateAnotherClick()">
               Generate another Video
             </button>
+            ${renderLimitNote('used')}
           </div>
         </div>
         ${renderModals()}
@@ -2266,11 +2305,12 @@
     function renderStep5() {
       const displayWorkshop = state.form.workshopName.trim() || 'Sharma Auto Care';
       const displayPhone = state.form.whatsapp.trim() ? '+91 ' + state.form.whatsapp.trim() : '+91 98201 44510';
-      const leadVideo = { title: `${displayWorkshop} — Video #1`, meta: '0:30 • Ready • Today', scale: 1 };
-      const otherVideos = [
-        { title: `${displayWorkshop} — Video #2`, meta: '0:28 • Ready • Yesterday', scale: 1.12 },
-        { title: `${displayWorkshop} — Video #3`, meta: '0:30 • Ready • 24 Oct', scale: 1.22 }
-      ];
+      const allVideos = [
+        { title: `${displayWorkshop} — Video #1`, meta: '0:30 • Ready • Today', scale: 1 },
+        { title: `${displayWorkshop} — Video #2`, meta: '0:28 • Ready • Today', scale: 1.12 }
+      ].slice(0, state.videosGenerated).reverse();
+      const leadVideo = allVideos[0];
+      const otherVideos = allVideos.slice(1);
 
       return `
         ${renderTopHeader(state.previousStep || 2)}
@@ -2281,6 +2321,12 @@
               <p class="screen-subtitle">Watch, download, or share your personalised workshop videos.</p>
             </div>
 
+            ${!leadVideo ? `
+              <div class="gallery-empty">
+                <h4>No videos yet</h4>
+                <p>Your personalised workshop videos will appear here once they're generated.</p>
+              </div>
+            ` : `
             <div class="gallery-list">
               <!-- LEADING FIRST VIDEO CARD -->
               <div class="gallery-lead-card">
@@ -2338,12 +2384,14 @@
                 </div>
               `).join('')}
             </div>
+            `}
           </div>
 
           <div class="sheet-footer">
             <button class="primary-cta" onclick="handleCreateAnotherClick()">
-              Create Another Video
+              ${state.videosGenerated === 0 ? 'Create Your Video' : 'Create Another Video'}
             </button>
+            ${renderLimitNote('used')}
           </div>
         </div>
         ${renderModals()}
@@ -2455,7 +2503,7 @@
 
             <div class="dummy-copy-card">
               <h4>1. Data We Collect</h4>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. We collect your Full Name, Email ID, WhatsApp Number, Workshop Name, Workshop Address, facial photograph, and 25–30 second voice sample solely for generating your personalised video.</p>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. We collect your First Name, Last Name, Email ID, WhatsApp Number, Workshop Name, Workshop Address, facial photograph, and 25–30 second voice sample solely for generating your personalised video.</p>
 
               <h4>2. Biometric & Voice Processing</h4>
               <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris. Your photo and voice recording are processed securely through our AI personalisation engine and are not shared with unauthorised third parties.</p>
@@ -2646,10 +2694,10 @@
                 !
               </div>
               <h3 style="font-size:17px; font-weight:700; color:#111827; margin-bottom:6px;">
-                Attempt limit reached
+                Video limit reached (2/2)
               </h3>
               <p style="font-size:12.5px; color:#4B5563; line-height:1.45; margin-bottom:16px;">
-                You have exhausted all 3 available attempts. You can view and share your generated videos in <strong>My Gallery</strong>.
+                You have generated the maximum of 2 videos. You can view and share your generated videos in <strong>My Gallery</strong>.
               </p>
               <button class="primary-cta" style="height:44px;" onclick="toggleLimitModal(false); openMenuPage(5);">
                 Go to My Gallery
@@ -2880,7 +2928,7 @@
         val = val.replace(/[^0-9]/g, '');
       }
       state.form[field] = val.slice(0, maxLen);
-      const anyProfane = ['name', 'workshopName', 'workshopAddress'].some(k => checkProfanityText(state.form[k]));
+      const anyProfane = ['firstName', 'lastName', 'workshopName', 'workshopAddress'].some(k => checkProfanityText(state.form[k]));
       state.form.profanityError = anyProfane;
       render();
     }
@@ -2920,6 +2968,8 @@
 
     function confirmChecklistAndSubmit() {
       state.showModerationChecklistPopup = false;
+      if (state.videosGenerated >= state.maxVideos) { toggleLimitModal(true); return; }
+      state.videosGenerated += 1;
       triggerBrandLoader(
         'Accelerating your video',
         'Cloning your voice and animating your personalised workshop video...',
@@ -3321,8 +3371,7 @@
     }
 
     function handleCreateAnotherClick() {
-      state.attemptsUsed += 1;
-      if (state.attemptsUsed >= state.maxAttempts) {
+      if (state.videosGenerated >= state.maxVideos) {
         toggleLimitModal(true);
       } else {
         state.photo.status = 'empty';
